@@ -1,5 +1,7 @@
 {
   "name": "aqa-internship-playwright",
+  "type": "module",
+
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -11,7 +13,7 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "type": "commonjs",
+  //"type": "commonjs",
   "bugs": {
     "url": "https://github.com/KumarHanchinmani/AQA-Internship-Playwright/issues"
   },
