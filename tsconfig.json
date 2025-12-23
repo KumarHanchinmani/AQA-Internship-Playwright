@@ -25,20 +25,6 @@
       "types": ["node", "@playwright/test"]
     },
   
-    "include": [
-      "tests/**/*.ts",
-      "pages/**/*.ts",
-      "utils/**/*.ts",
-      "fixtures/**/*.ts",
-      "config/**/*.ts",
-      "playwright.config.ts"
-    ],
-  
-    "exclude": [
-      "node_modules",
-      "playwright-report",
-      "test-results",
-      "dist"
-    ]
+   
   }
   
