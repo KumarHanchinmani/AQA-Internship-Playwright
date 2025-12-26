@@ -1,65 +1,32 @@
 import { test, expect } from '@playwright/test';
 import { LoginPage } from '../pages/loginPage.spec';
 import { RegistrationPage } from '../pages/registrationPage.spec';
+import { createValidRegistrationData } from '../test-data/registrationData';
+import { Links } from '../enums/links.enums';
 
-test.describe('Login Page', () => { 
+test.describe('Registration page', () => {
+  let loginPage: LoginPage;
+  let regPage: RegistrationPage;
 
+  test.beforeEach(async ({ page }) => {
+    loginPage = new LoginPage(page);
+    regPage = new RegistrationPage(page);
 
-    test('Verify the sign in link is visible', async ({ page }) => {
-        await page.goto('https://qa-course-01.andersenlab.com/login');
-    
-        const loginPage = new LoginPage(page);
-        const regPage = new RegistrationPage (page);
+    await loginPage.open();
+    await loginPage.clickRegister();
+  });
 
-        await loginPage.registerButton();
-        await expect(regPage.signInLink).toBeVisible();
-    
-      });
+  test('[TC_REGISTER_001] Verify Sign In link is available', async ({
+    page,
+  }) => {
+    await expect(regPage.signInLink).toBeVisible();
+  });
 
-    test('successfull register with valid data', async({ page }) => {
-
-        await page.goto('https://qa-course-01.andersenlab.com/login');
-    
-        const loginPage = new LoginPage(page);
-        const regPage = new RegistrationPage (page);
-
-        await loginPage.registerButton();
-        const userData = {
-            firstName: 'Kumar',
-            lastName: 'Dew',
-            birthDate: {
-              day: 15,
-              month: 'April',
-              year: '1998'
-            },
-            email: 'abtest234@gmail.com',
-            password: 'qwerty@123',
-            confirmPassword: 'qwerty@123'
-          };
-
-          await regPage.register(userData);
-          await expect(page).toHaveURL('https://qa-course-01.andersenlab.com/login');
-
-
-        
-      
-
-
-
-    });
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+  test('[TC_REGISTER_002] Successful registration with valid data', async ({
+    page,
+  }) => {
+    const userData = createValidRegistrationData();
+    await regPage.register(userData);
+    await expect(page).toHaveURL(Links.LOGIN);
+  });
 });
