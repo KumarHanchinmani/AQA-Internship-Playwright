@@ -13,30 +13,22 @@ test.describe('Registration page', () => {
     regPage = new RegistrationPage(page);
 
     await loginPage.open();
-    await loginPage.clickRegister();
   });
 
-
-  test('[AQAPRACT-507] Availability of link Regisration on Sign in page ]' , async ({
+  test('[AQAPRACT-507] Availability of link Regisration on Sign in page ]', async ({
     page,
   }) => {
     await expect(loginPage.registrationButton).toBeVisible();
-    await loginPage.registrationButton.click() ;
-    await expect(regPage.signInLink).toBeVisible;
-
+    await loginPage.registrationButton.click();
+    await expect(regPage.signInLink).toBeVisible();
   });
 
   test('[AQAPRACT-508] Successfull registration with valid data', async ({
     page,
   }) => {
+    await loginPage.clickRegister();
     const userData = createValidRegistrationData();
     await regPage.register(userData);
     await expect(page).toHaveURL(Links.LOGIN);
   });
-
-  
-
-
-
-  });
-
+});

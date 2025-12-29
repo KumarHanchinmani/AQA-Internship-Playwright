@@ -11,6 +11,4 @@ test.describe('Login Page', () => {
     regPage = new RegistrationPage(page);
     await loginPage.open();
   });
-
-  
 });

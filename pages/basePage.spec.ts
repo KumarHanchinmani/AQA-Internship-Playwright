@@ -13,6 +13,5 @@ export class BasePage {
 
   async getTitle(): Promise<string> {
     return this.page.title();
-  } 
-  
+  }
 }
