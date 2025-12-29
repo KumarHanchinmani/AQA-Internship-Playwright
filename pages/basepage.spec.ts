@@ -11,7 +11,8 @@ export class BasePage {
     await this.page.goto(url);
   }
 
-  async getTitle() {
+  async getTitle(): Promise<string> {
     return this.page.title();
   }
+  
 }

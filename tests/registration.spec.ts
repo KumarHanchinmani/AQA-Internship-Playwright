@@ -16,17 +16,27 @@ test.describe('Registration page', () => {
     await loginPage.clickRegister();
   });
 
-  test('[TC_REGISTER_001] Verify Sign In link is available', async ({
+
+  test('[AQAPRACT-507] Availability of link Regisration on Sign in page ]' , async ({
     page,
   }) => {
-    await expect(regPage.signInLink).toBeVisible();
+    await expect(loginPage.registrationButton).toBeVisible();
+    await loginPage.registrationButton.click() ;
+    await expect(regPage.signInLink).toBeVisible;
+
   });
 
-  test('[TC_REGISTER_002] Successful registration with valid data', async ({
+  test('[AQAPRACT-508] Successfull registration with valid data', async ({
     page,
   }) => {
     const userData = createValidRegistrationData();
     await regPage.register(userData);
     await expect(page).toHaveURL(Links.LOGIN);
   });
-});
+
+  
+
+
+
+  });
+
