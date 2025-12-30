@@ -1,8 +1,8 @@
 import { RegistrationData } from '../data-types/registration.interface';
 
-export const createValidRegistrationData = (
-  overrides?: Partial<RegistrationData>
-): RegistrationData => {
+export const createValidRegistrationData = (): RegistrationData => {
+  const timestamp = Date.now();
+
   return {
     firstName: 'Kumar',
     lastName: 'Dew',
@@ -14,6 +14,5 @@ export const createValidRegistrationData = (
     email: `user_${Date.now()}@test.com`,
     password: 'qwerty@123',
     confirmPassword: 'qwerty@123',
-    ...overrides,
   };
 };

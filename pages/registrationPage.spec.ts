@@ -1,4 +1,4 @@
-import { expect, Locator, Page } from '@playwright/test';
+import { Locator, Page } from '@playwright/test';
 import { BasePage } from './basePage.spec';
 import { RegistrationData } from '../data-types/registration.interface';
 
@@ -9,7 +9,7 @@ export class RegistrationPage extends BasePage {
   private emailField: Locator;
   private passwordField: Locator;
   private confirmPasswordField: Locator;
-  readonly submitButton: Locator;
+  private submitButton: Locator;
   readonly signInLink: Locator;
   private readonly yearDropdown: Locator;
   private readonly monthDropdown: Locator;
@@ -37,7 +37,7 @@ export class RegistrationPage extends BasePage {
     );
   }
 
-  async fillForm(data: RegistrationData): Promise<void> {
+  async register(data: RegistrationData) {
     await this.firstNameInput.fill(data.firstName);
     await this.lastNameInput.fill(data.lastName);
     await this.dateOfBirth.click();
@@ -48,15 +48,6 @@ export class RegistrationPage extends BasePage {
     await this.emailField.fill(data.email);
     await this.passwordField.fill(data.password);
     await this.confirmPasswordField.fill(data.confirmPassword);
-  }
-
-  async submit(): Promise<void> {
-    await expect(this.submitButton).toBeEnabled();
     await this.submitButton.click();
-  }
-
-  async register(data: RegistrationData): Promise<void> {
-    await this.fillForm(data);
-    await this.submit();
   }
 }
