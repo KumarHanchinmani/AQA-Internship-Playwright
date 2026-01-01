@@ -74,16 +74,17 @@ test.describe('Registration page', () => {
       await regPage.fillForm(userData);
       await expect(regPage.submitButton).toBeDisabled();
     });
-    
-    test.describe('Last name validation', () => {
-      test('[AQAPRACT-514] Register with max Last name length (255 characters)', async ({page})=> {
-        const userData = createValidRegistrationData({
-          lastName : generateString(255),
-         });
-         await regPage.fillForm(userData);
-      await regPage.submit();
-      await expect(page).toHaveURL(Links.LOGIN);
 
+    test.describe('Last name validation', () => {
+      test('[AQAPRACT-514] Register with max Last name length (255 characters)', async ({
+        page,
+      }) => {
+        const userData = createValidRegistrationData({
+          lastName: generateString(255),
+        });
+        await regPage.fillForm(userData);
+        await regPage.submit();
+        await expect(page).toHaveURL(Links.LOGIN);
       });
 
       test('[AQAPRACT-515] Register with min Last name length (1 character)', async ({
@@ -121,7 +122,42 @@ test.describe('Registration page', () => {
       await expect(regPage.submitButton).toBeDisabled();
     });
 
+    test.describe('Date of birth validation', () => {
+      test('[AQAPRACT-519] Register with empty "Date of birth" field', async ({
+        page,
+      }) => {
+        const userData = createValidRegistrationData({
+          birthDate: undefined,
+        });
+        await regPage.fillForm(userData);
+        await expect(regPage.submitButton).toBeDisabled();
+      });
+
+      test('[AQAPRACT-521]The date is filled in manually in the Date of birth field', async ({
+        page,
+      }) => {
+        const userData = createValidRegistrationData({
+          birthDate: undefined,
+          manualDob: '05/05/1995',
+        });
+        await regPage.fillForm(userData);
+        await regPage.submit();
+        await expect(page).toHaveURL(Links.LOGIN);
+      });
+
+      test('[AQAPRACT-522] It is impossible to register with a future Date of Birth', async () => {
+        const userData = createValidRegistrationData({
+          birthDate: {
+            day: 5,
+            month: 'April',
+            year: '2045',
+          },
+        });
+
+        await regPage.fillForm(userData);
+
+        await expect(regPage.submitButton).toBeDisabled();
+      });
+    });
   });
 });
-
-

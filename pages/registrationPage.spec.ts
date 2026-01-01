@@ -1,6 +1,9 @@
 import { expect, Locator, Page } from '@playwright/test';
 import { BasePage } from './basePage.spec';
-import { RegistrationData } from '../data-types/registration.interface';
+import {
+  BirthDate,
+  RegistrationData,
+} from '../data-types/registration.interface';
 
 export class RegistrationPage extends BasePage {
   private firstNameInput: Locator;
@@ -40,14 +43,24 @@ export class RegistrationPage extends BasePage {
   async fillForm(data: RegistrationData): Promise<void> {
     await this.firstNameInput.fill(data.firstName);
     await this.lastNameInput.fill(data.lastName);
-    await this.dateOfBirth.click();
-    await this.yearDropdown.selectOption({ label: data.birthDate.year });
-    await this.monthDropdown.selectOption({ label: data.birthDate.month });
-    await this.dayLocator(data.birthDate.day).click();
-    await this.page.keyboard.press('Escape');
+
+    if (data.manualDob) {
+      await this.dateOfBirth.fill(data.manualDob);
+      await this.page.keyboard.press('Escape');
+    } else if (data.birthDate) {
+      await this.selectDateFromCalendar(data.birthDate);
+    }
+
     await this.emailField.fill(data.email);
     await this.passwordField.fill(data.password);
     await this.confirmPasswordField.fill(data.confirmPassword);
+  }
+  private async selectDateFromCalendar(birthDate: BirthDate): Promise<void> {
+    await this.dateOfBirth.click();
+    await this.yearDropdown.selectOption({ label: birthDate.year });
+    await this.monthDropdown.selectOption({ label: birthDate.month });
+    await this.dayLocator(birthDate.day).click();
+    await this.page.keyboard.press('Escape');
   }
 
   async submit(): Promise<void> {
