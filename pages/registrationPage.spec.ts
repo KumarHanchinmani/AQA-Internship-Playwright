@@ -13,6 +13,8 @@ export class RegistrationPage extends BasePage {
   readonly signInLink: Locator;
   private readonly yearDropdown: Locator;
   private readonly monthDropdown: Locator;
+  private emailErrorMessage: Locator;
+
 
   constructor(page: Page) {
     super(page);
@@ -28,6 +30,7 @@ export class RegistrationPage extends BasePage {
       .locator('.react-datepicker__header select')
       .nth(1);
     this.yearDropdown = page.locator('.react-datepicker__header select').nth(0);
+    this.emailErrorMessage = page.getByText(/invalid email/i);
   }
 
   private dayLocator(day: number): Locator {
@@ -59,4 +62,13 @@ export class RegistrationPage extends BasePage {
     await this.fillForm(data);
     await this.submit();
   }
+  
+  async expectEmailValidationError(message: string | RegExp): Promise<void> {
+    await expect(this.emailErrorMessage).toBeVisible();
+    await expect(this.emailErrorMessage).toHaveText(message);
+  }
+  
+
+
+
 }
