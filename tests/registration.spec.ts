@@ -74,16 +74,17 @@ test.describe('Registration page', () => {
       await regPage.fillForm(userData);
       await expect(regPage.submitButton).toBeDisabled();
     });
-    
-    test.describe('Last name validation', () => {
-      test('[AQAPRACT-514] Register with max Last name length (255 characters)', async ({page})=> {
-        const userData = createValidRegistrationData({
-          lastName : generateString(255),
-         });
-         await regPage.fillForm(userData);
-      await regPage.submit();
-      await expect(page).toHaveURL(Links.LOGIN);
 
+    test.describe('Last name validation', () => {
+      test('[AQAPRACT-514] Register with max Last name length (255 characters)', async ({
+        page,
+      }) => {
+        const userData = createValidRegistrationData({
+          lastName: generateString(255),
+        });
+        await regPage.fillForm(userData);
+        await regPage.submit();
+        await expect(page).toHaveURL(Links.LOGIN);
       });
 
       test('[AQAPRACT-515] Register with min Last name length (1 character)', async ({
@@ -120,8 +121,41 @@ test.describe('Registration page', () => {
       await regPage.fillForm(userData);
       await expect(regPage.submitButton).toBeDisabled();
     });
+  });
 
+  test.describe('Confirm password  validation', () => {
+    test('[AQAPRACT-531]Register with equal data Password and Confirm password fields', async ({
+      page,
+    }) => {
+      const userData = createValidRegistrationData({
+        password: '1q2w3e4r5t',
+        confirmPassword: '1q2w3e4r5t',
+      });
+      await regPage.fillForm(userData);
+      await regPage.submit();
+      await expect(page).toHaveURL(Links.LOGIN);
+    });
+
+    test('[AQAPRACT-532] Register with different data Password and Confirm password fields', async ({
+      page,
+    }) => {
+      const userData = createValidRegistrationData({
+        password: '1q2w3e4r5t',
+        confirmPassword: '1q2w3e5r4r',
+      });
+      await regPage.fillForm(userData);
+      await expect(regPage.submitButton).toBeDisabled();
+    });
+
+    test('[AQAPRACT-533] Register with empty Confirm password fields', async ({
+      page,
+    }) => {
+      const userData = createValidRegistrationData({
+        password: '1q2w3e4r5t6y',
+        confirmPassword: '',
+      });
+      await regPage.fillForm(userData);
+      await expect(regPage.submitButton).toBeDisabled();
+    });
   });
 });
-
-
