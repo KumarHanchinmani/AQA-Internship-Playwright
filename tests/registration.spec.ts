@@ -74,54 +74,52 @@ test.describe('Registration page', () => {
       await regPage.fillForm(userData);
       await expect(regPage.submitButton).toBeDisabled();
     });
-    
-    test.describe('Last name validation', () => {
-      test('[AQAPRACT-514] Register with max Last name length (255 characters)', async ({page})=> {
-        const userData = createValidRegistrationData({
-          lastName : generateString(255),
-         });
-         await regPage.fillForm(userData);
+  });
+
+  test.describe('Last name validation', () => {
+    test('[AQAPRACT-514] Register with max Last name length (255 characters)', async ({
+      page,
+    }) => {
+      const userData = createValidRegistrationData({
+        lastName: generateString(255),
+      });
+      await regPage.fillForm(userData);
       await regPage.submit();
       await expect(page).toHaveURL(Links.LOGIN);
-
-      });
-
-      test('[AQAPRACT-515] Register with min Last name length (1 character)', async ({
-        page,
-      }) => {
-        const userData = createValidRegistrationData({
-          lastName: 'T',
-        });
-        await regPage.fillForm(userData);
-        await regPage.submit();
-        await expect(page).toHaveURL(Links.LOGIN);
-      });
     });
 
-    test('[AQAPRACT-516] Register with max+1 Last name length (256 characters)', async ({
+    test('[AQAPRACT-515] Register with min Last name length (1 character)', async ({
       page,
     }) => {
       const userData = createValidRegistrationData({
-        lastName: generateString(256),
+        lastName: 'T',
       });
-
       await regPage.fillForm(userData);
       await regPage.submit();
-      await expect(page).toHaveURL(Links.REGISTER);
+      await expect(page).toHaveURL(Links.LOGIN);
+    });
+  });
+
+  test('[AQAPRACT-516] Register with max+1 Last name length (256 characters)', async ({
+    page,
+  }) => {
+    const userData = createValidRegistrationData({
+      lastName: generateString(256),
     });
 
-    test('[AQAPRACT-517] Register with empty Last name field', async ({
-      page,
-    }) => {
-      const userData = createValidRegistrationData({
-        lastName: '',
-      });
+    await regPage.fillForm(userData);
+    await regPage.submit();
+    await expect(page).toHaveURL(Links.REGISTER);
+  });
 
-      await regPage.fillForm(userData);
-      await expect(regPage.submitButton).toBeDisabled();
+  test('[AQAPRACT-517] Register with empty Last name field', async ({
+    page,
+  }) => {
+    const userData = createValidRegistrationData({
+      lastName: '',
     });
 
+    await regPage.fillForm(userData);
+    await expect(regPage.submitButton).toBeDisabled();
   });
 });
-
-
