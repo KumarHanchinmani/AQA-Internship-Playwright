@@ -74,6 +74,7 @@ test.describe('Registration page', () => {
       await regPage.fillForm(userData);
       await expect(regPage.submitButton).toBeDisabled();
     });
+  });
 
     test.describe('Last name validation', () => {
       test('[AQAPRACT-514] Register with max Last name length (255 characters)', async ({
@@ -97,7 +98,7 @@ test.describe('Registration page', () => {
         await regPage.submit();
         await expect(page).toHaveURL(Links.LOGIN);
       });
-    });
+    
 
     test('[AQAPRACT-516] Register with max+1 Last name length (256 characters)', async ({
       page,
