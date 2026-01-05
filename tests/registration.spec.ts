@@ -169,7 +169,7 @@ test.describe('Password validation', () => {
     await regPage.submit();
     await expect(page).toHaveURL(Links.LOGIN);
   });
-  test('[AQAPRACT-527]Register with max "Password" length (20 characters)', async ({
+  test('[AQAPRACT-527] Register with max "Password" length (20 characters)', async ({
     page,
   }) => {
     const userData = createValidRegistrationData({
@@ -181,7 +181,7 @@ test.describe('Password validation', () => {
     await expect(page).toHaveURL(Links.LOGIN);
   });
 
-  test('[AQAPRACT-528]Register with min-1 "Password" length (7 characters)', async ({
+  test('[AQAPRACT-528] Register with min-1 "Password" length (7 characters)', async ({
     page,
   }) => {
     const userData = createValidRegistrationData({
@@ -193,7 +193,7 @@ test.describe('Password validation', () => {
     await expect(regPage.submitButton).toBeDisabled();
   });
 
-  test('[AQAPRACT-529]Register with max+1 Password length (21 characters)', async ({
+  test('[AQAPRACT-529] Register with max+1 Password length (21 characters)', async ({
     page,
   }) => {
     const userData = createValidRegistrationData({
@@ -205,9 +205,7 @@ test.describe('Password validation', () => {
     await expect(regPage.submitButton).toBeDisabled();
   });
 
-  test('[AQAPRACT-530]Register with empty Password field', async ({
-    page,
-  }) => {
+  test('[AQAPRACT-530] Register with empty Password field', async ({ page }) => {
     const userData = createValidRegistrationData({
       password: '',
       confirmPassword: '',
@@ -229,7 +227,7 @@ test.describe('Confirm password  validation', () => {
     await loginPage.clickRegister();
   });
 
-  test('[AQAPRACT-531]Register with equal data Password and Confirm password fields', async ({
+  test('[AQAPRACT-531] Register with equal data Password and Confirm password fields', async ({
     page,
   }) => {
     const userData = createValidRegistrationData({
