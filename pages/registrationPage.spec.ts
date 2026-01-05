@@ -15,6 +15,8 @@ export class RegistrationPage extends BasePage {
   private readonly monthDropdown: Locator;
   readonly minpasswordError: Locator;
   readonly maxpasswordError: Locator;
+  readonly confirmpasswordError: Locator;
+  readonly confirmPasswordRequired: Locator;
 
   constructor(page: Page) {
     super(page);
@@ -32,6 +34,8 @@ export class RegistrationPage extends BasePage {
     this.yearDropdown = page.locator('.react-datepicker__header select').nth(0);
     this.minpasswordError = page.getByText(/minimum\s+8\s+characters/i);
     this.maxpasswordError = page.getByText(/maximum\s+20\s+characters/i);
+    this.confirmpasswordError = page.getByText(/passwords\s+must\s+match/i);
+    this.confirmPasswordRequired = page.getByText(/Required/i);
   }
 
   private dayLocator(day: number): Locator {
