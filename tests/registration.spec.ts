@@ -205,7 +205,9 @@ test.describe('Password validation', () => {
     await expect(regPage.submitButton).toBeDisabled();
   });
 
-  test('[AQAPRACT-530] Register with empty Password field', async ({ page }) => {
+  test('[AQAPRACT-530] Register with empty Password field', async ({
+    page,
+  }) => {
     const userData = createValidRegistrationData({
       password: '',
       confirmPassword: '',
