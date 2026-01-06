@@ -146,6 +146,75 @@ test.describe('Last name validation', () => {
   });
 });
 
+test.describe('Password validation', () => {
+  let loginPage: LoginPage;
+  let regPage: RegistrationPage;
+
+  test.beforeEach(async ({ page }) => {
+    loginPage = new LoginPage(page);
+    regPage = new RegistrationPage(page);
+
+    await loginPage.open();
+    await loginPage.clickRegister();
+  });
+
+  test('[AQAPRACT-526] Register with min Password length (8 characters)', async ({
+    page,
+  }) => {
+    const userData = createValidRegistrationData({
+      password: '1q2w3e4r',
+      confirmPassword: '1q2w3e4r',
+    });
+    await regPage.fillForm(userData);
+    await regPage.submit();
+    await expect(page).toHaveURL(Links.LOGIN);
+  });
+  test('[AQAPRACT-527] Register with max "Password" length (20 characters)', async ({
+    page,
+  }) => {
+    const userData = createValidRegistrationData({
+      password: '1q2w3e4r5t6y7u8i9o0p',
+      confirmPassword: '1q2w3e4r5t6y7u8i9o0p',
+    });
+    await regPage.fillForm(userData);
+    await regPage.submit();
+    await expect(page).toHaveURL(Links.LOGIN);
+  });
+
+  test('[AQAPRACT-528] Register with min-1 "Password" length (7 characters)', async ({
+    page,
+  }) => {
+    const userData = createValidRegistrationData({
+      password: '1q2w3e4',
+      confirmPassword: '1q2w3e4',
+    });
+    await regPage.fillForm(userData);
+    await expect(regPage.minpasswordError).toBeVisible();
+    await expect(regPage.submitButton).toBeDisabled();
+  });
+
+  test('[AQAPRACT-529] Register with max+1 Password length (21 characters)', async ({
+    page,
+  }) => {
+    const userData = createValidRegistrationData({
+      password: '1q2w3e4r5t6y7u8i9o0p1',
+      confirmPassword: '1q2w3e4r5t6y7u8i9o0p1',
+    });
+    await regPage.fillForm(userData);
+    await expect(regPage.maxpasswordError).toBeVisible();
+    await expect(regPage.submitButton).toBeDisabled();
+  });
+
+  test('[AQAPRACT-530] Register with empty Password field', async ({ page }) => {
+    const userData = createValidRegistrationData({
+      password: '',
+      confirmPassword: '',
+    });
+    await regPage.fillForm(userData);
+    await expect(regPage.submitButton).toBeDisabled();
+  });
+});
+
 test.describe('Confirm password  validation', () => {
   let loginPage: LoginPage;
   let regPage: RegistrationPage;
@@ -158,7 +227,7 @@ test.describe('Confirm password  validation', () => {
     await loginPage.clickRegister();
   });
 
-  test('[AQAPRACT-531]Register with equal data Password and Confirm password fields', async ({
+  test('[AQAPRACT-531] Register with equal data Password and Confirm password fields', async ({
     page,
   }) => {
     const userData = createValidRegistrationData({
