@@ -39,8 +39,7 @@ export class RegistrationPage extends BasePage {
     await this.firstNameInput.fill(data.firstName);
     await this.lastNameInput.fill(data.lastName);
     await this.dateOfBirth.click();
-    await this.calendar.selectDate(data.birthDate);
-    await this.calendar.close();
+    await this.selectDateOfBirth(data.birthDate);
     await this.emailField.fill(data.email);
     await this.passwordField.fill(data.password);
     await this.confirmPasswordField.fill(data.confirmPassword);
@@ -49,6 +48,54 @@ export class RegistrationPage extends BasePage {
   async submit(): Promise<void> {
     await expect(this.submitButton).toBeEnabled();
     await this.submitButton.click();
+  }
+
+  async openDOBCalendar(): Promise<void> {
+    await this.dateOfBirth.click();
+  }
+
+  async goToPreviousDOBMonth(): Promise<void> {
+    await this.calendar.previousMonthDOB();
+  }
+
+  async goToNextDOBMonth(): Promise<void> {
+    await this.calendar.nextMonthDOB();
+  }
+
+  async getDisplayedDOBMonth(): Promise<string> {
+    return await this.calendar.getCurrentMonth();
+  }
+
+  async isDOBYearDropdownEnabled(): Promise<boolean> {
+    return await this.calendar.isYearDropdownEnabled();
+  }
+
+  async isDOBMonthDropdownEnabled(): Promise<boolean> {
+    return await this.calendar.isMonthDropdownEnabled();
+  }
+
+  async selectDOBYear(year: string): Promise<void> {
+    await this.openDOBCalendar();
+    await this.calendar.selectYear(year);
+  }
+
+  async getDisplayedDOBYear(): Promise<string> {
+    return await this.calendar.getSelectedYear();
+  }
+
+  async selectDOBMonth(month: string): Promise<void> {
+    await this.openDOBCalendar();
+    await this.calendar.selectMonth(month);
+  }
+
+  async selectDateOfBirth(date: { year: string; month: string; day: number }) {
+    await this.openDOBCalendar();
+    await this.calendar.selectDate(date);
+    await this.calendar.close();
+  }
+
+  async getDOBValue(): Promise<string> {
+    return await this.dateOfBirth.inputValue();
   }
 
   async register(data: RegistrationData): Promise<void> {

@@ -4,6 +4,7 @@ import { RegistrationPage } from '../pages/registrationPage.spec';
 import { createValidRegistrationData } from '../test-data/registrationData';
 import { Links } from '../enums/links.enums';
 import { generateString } from '../utils/stringUtils';
+import { Calendar } from '../pages/calendar.spec';
 
 test.describe('Registration page', () => {
   let loginPage: LoginPage;
@@ -261,5 +262,75 @@ test.describe('Confirm password  validation', () => {
     });
     await regPage.fillForm(userData);
     await expect(regPage.submitButton).toBeDisabled();
+  });
+});
+
+test.describe('Calendar  validation', () => {
+  let loginPage: LoginPage;
+  let regPage: RegistrationPage;
+
+  test.beforeEach(async ({ page }) => {
+    loginPage = new LoginPage(page);
+    regPage = new RegistrationPage(page);
+
+    await loginPage.open();
+    await loginPage.clickRegister();
+  });
+  test('[AQAPRACT-745] Month navigators switch months', async ({ page }) => {
+    await regPage.openDOBCalendar();
+    const initialMonth = await regPage.getDisplayedDOBMonth();
+    await regPage.goToPreviousDOBMonth();
+    const previousMonth = await regPage.getDisplayedDOBMonth();
+    expect(previousMonth).not.toBe(initialMonth);
+
+    await regPage.goToNextDOBMonth();
+    const finalMonth = await regPage.getDisplayedDOBMonth();
+    expect(finalMonth).toBe(initialMonth);
+  });
+
+  test('[AQAPRACT-746] Year drop down is possible to be opened', async ({
+    page,
+  }) => {
+    await regPage.openDOBCalendar();
+    expect(await regPage.isDOBYearDropdownEnabled()).toBe(true);
+  });
+
+  test('[AQAPRACT-747] The year is possible to be selected in the drop down', async ({
+    page,
+  }) => {
+    await regPage.openDOBCalendar();
+    await regPage.selectDOBYear('1950');
+    const year = await regPage.getDisplayedDOBYear();
+    expect(year).toBe('1950');
+  });
+
+  test('[AQAPRACT-748] Month drop down is possible to be opened', async ({
+    page,
+  }) => {
+    await regPage.openDOBCalendar();
+    expect(await regPage.isDOBMonthDropdownEnabled()).toBe(true);
+  });
+
+  test('[AQAPRACT-749] The month is possible to be selected in the drop down', async ({
+    page,
+  }) => {
+    await regPage.openDOBCalendar();
+    await regPage.selectDOBMonth('May');
+    const month = await regPage.getDisplayedDOBMonth();
+    expect(month).toBe('May');
+  });
+
+  test.only('[AQAPRACT-750]The date is possible to be selected', async ({
+    page,
+  }) => {
+    await regPage.openDOBCalendar();
+    await regPage.selectDateOfBirth({
+      year: '1995',
+      month: 'May',
+      day: 15,
+    });
+
+    const dobValue = await regPage.getDOBValue();
+    expect(dobValue).toBe('05/15/1995');
   });
 });

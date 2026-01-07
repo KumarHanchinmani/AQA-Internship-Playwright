@@ -23,11 +23,51 @@ export class Calendar {
     await this.dayLocator(date.day).click();
   }
 
-  private dayLocator(day: number): Locator {
+  dayLocator(day: number): Locator {
     const d = day.toString().padStart(2, '0');
     return this.page.locator(
       `.react-datepicker__day--0${d}:not(.react-datepicker__day--outside-month)`
     );
+  }
+
+  async previousMonthDOB(): Promise<void> {
+    await this.previousMonth.click();
+  }
+
+  async nextMonthDOB(): Promise<void> {
+    await this.nextMonth.click();
+  }
+
+  async getCurrentMonth(): Promise<string> {
+    return await this.monthDropdown.inputValue();
+  }
+
+  async getCurrentYear(): Promise<string> {
+    return await this.yearDropdown.inputValue();
+  }
+
+  async isYearDropdownEnabled(): Promise<boolean> {
+    return await this.yearDropdown.isEnabled();
+  }
+
+  async isMonthDropdownEnabled(): Promise<boolean> {
+    return await this.monthDropdown.isEnabled();
+  }
+
+  async selectYear(year: string): Promise<void> {
+    await this.yearDropdown.selectOption({ label: year });
+  }
+
+  async selectMonth(month: string): Promise<void> {
+    await this.monthDropdown.selectOption({ label: month });
+  }
+
+  async getSelectedYear(): Promise<string> {
+    return await this.yearDropdown.inputValue();
+  }
+
+  async getSelectedMonth(): Promise<string> {
+    return await this.monthDropdown.inputValue();
   }
 
   async close() {
