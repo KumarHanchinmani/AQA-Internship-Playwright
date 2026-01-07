@@ -1,13 +1,13 @@
 import { expect, Locator, Page } from '@playwright/test';
-import { BasePage } from './basePage.spec';
+import { BasePage } from './basePage.page';
 import { RegistrationData } from '../data-types/registration.interface';
-import { Calendar } from './calendar.spec';
+import { Calendar } from './calendar.page';
 
 export class RegistrationPage extends BasePage {
   private firstNameInput: Locator;
   private lastNameInput: Locator;
-  private dateOfBirth: Locator;
-  private emailField: Locator;
+  readonly dateOfBirth: Locator;
+  readonly emailField: Locator;
   private passwordField: Locator;
   private confirmPasswordField: Locator;
   readonly submitButton: Locator;
@@ -16,9 +16,11 @@ export class RegistrationPage extends BasePage {
   readonly maxpasswordError: Locator;
   readonly confirmpasswordError: Locator;
   readonly confirmPasswordRequired: Locator;
+  public calendar: Calendar;
 
   constructor(page: Page) {
     super(page);
+    this.calendar = new Calendar(this.page);
     this.firstNameInput = page.getByPlaceholder('First Name');
     this.lastNameInput = page.getByPlaceholder('Last Name');
     this.dateOfBirth = page.getByPlaceholder('Date of birth');
@@ -33,13 +35,12 @@ export class RegistrationPage extends BasePage {
     this.confirmPasswordRequired = page.getByText(/Required/i);
   }
 
-  private calendar = new Calendar(this.page);
-
   async fillForm(data: RegistrationData): Promise<void> {
     await this.firstNameInput.fill(data.firstName);
     await this.lastNameInput.fill(data.lastName);
     await this.dateOfBirth.click();
-    await this.selectDateOfBirth(data.birthDate);
+    await this.calendar.selectDate(data.birthDate);
+    await this.calendar.close();
     await this.emailField.fill(data.email);
     await this.passwordField.fill(data.password);
     await this.confirmPasswordField.fill(data.confirmPassword);
@@ -52,46 +53,6 @@ export class RegistrationPage extends BasePage {
 
   async openDOBCalendar(): Promise<void> {
     await this.dateOfBirth.click();
-  }
-
-  async goToPreviousDOBMonth(): Promise<void> {
-    await this.calendar.previousMonthDOB();
-  }
-
-  async goToNextDOBMonth(): Promise<void> {
-    await this.calendar.nextMonthDOB();
-  }
-
-  async getDisplayedDOBMonth(): Promise<string> {
-    return await this.calendar.getCurrentMonth();
-  }
-
-  async isDOBYearDropdownEnabled(): Promise<boolean> {
-    return await this.calendar.isYearDropdownEnabled();
-  }
-
-  async isDOBMonthDropdownEnabled(): Promise<boolean> {
-    return await this.calendar.isMonthDropdownEnabled();
-  }
-
-  async selectDOBYear(year: string): Promise<void> {
-    await this.openDOBCalendar();
-    await this.calendar.selectYear(year);
-  }
-
-  async getDisplayedDOBYear(): Promise<string> {
-    return await this.calendar.getSelectedYear();
-  }
-
-  async selectDOBMonth(month: string): Promise<void> {
-    await this.openDOBCalendar();
-    await this.calendar.selectMonth(month);
-  }
-
-  async selectDateOfBirth(date: { year: string; month: string; day: number }) {
-    await this.openDOBCalendar();
-    await this.calendar.selectDate(date);
-    await this.calendar.close();
   }
 
   async getDOBValue(): Promise<string> {

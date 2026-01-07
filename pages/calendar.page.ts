@@ -1,11 +1,12 @@
 import { Page, Locator } from '@playwright/test';
+import { BasePage } from './basePage.page';
 
 export class Calendar {
-  readonly previousMonth: Locator;
-  readonly nextMonth: Locator;
-  readonly yearDropdown: Locator;
-  readonly monthDropdown: Locator;
-  page: Page;
+  public readonly previousMonth: Locator;
+  public readonly nextMonth: Locator;
+  public readonly yearDropdown: Locator;
+  public readonly monthDropdown: Locator;
+  private readonly page : Page ;
 
   constructor(page: Page) {
     this.page = page;

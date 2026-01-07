@@ -1,10 +1,10 @@
 import { test, expect } from '@playwright/test';
-import { LoginPage } from '../pages/loginPage.spec';
-import { RegistrationPage } from '../pages/registrationPage.spec';
+import { LoginPage } from '../pages/loginPage.page';
+import { RegistrationPage } from '../pages/registrationPage.page';
 import { createValidRegistrationData } from '../test-data/registrationData';
 import { Links } from '../enums/links.enums';
 import { generateString } from '../utils/stringUtils';
-import { Calendar } from '../pages/calendar.spec';
+import { Calendar } from '../pages/calendar.page';
 
 test.describe('Registration page', () => {
   let loginPage: LoginPage;
@@ -278,13 +278,13 @@ test.describe('Calendar  validation', () => {
   });
   test('[AQAPRACT-745] Month navigators switch months', async ({ page }) => {
     await regPage.openDOBCalendar();
-    const initialMonth = await regPage.getDisplayedDOBMonth();
-    await regPage.goToPreviousDOBMonth();
-    const previousMonth = await regPage.getDisplayedDOBMonth();
+    const initialMonth = await regPage.calendar.getCurrentMonth();
+    await regPage.calendar.previousMonthDOB();
+    const previousMonth = await regPage.calendar.getCurrentMonth();
     expect(previousMonth).not.toBe(initialMonth);
 
-    await regPage.goToNextDOBMonth();
-    const finalMonth = await regPage.getDisplayedDOBMonth();
+    await regPage.calendar.nextMonthDOB();
+    const finalMonth = await regPage.calendar.getCurrentMonth();
     expect(finalMonth).toBe(initialMonth);
   });
 
@@ -292,45 +292,42 @@ test.describe('Calendar  validation', () => {
     page,
   }) => {
     await regPage.openDOBCalendar();
-    expect(await regPage.isDOBYearDropdownEnabled()).toBe(true);
+    await expect(regPage.calendar.yearDropdown).toBeEnabled();
   });
 
   test('[AQAPRACT-747] The year is possible to be selected in the drop down', async ({
     page,
   }) => {
     await regPage.openDOBCalendar();
-    await regPage.selectDOBYear('1950');
-    const year = await regPage.getDisplayedDOBYear();
-    expect(year).toBe('1950');
+    await regPage.calendar.selectYear('1950');
+    await expect(regPage.calendar.yearDropdown).toHaveValue('1950');
   });
 
   test('[AQAPRACT-748] Month drop down is possible to be opened', async ({
     page,
   }) => {
     await regPage.openDOBCalendar();
-    expect(await regPage.isDOBMonthDropdownEnabled()).toBe(true);
+    await expect(regPage.calendar.monthDropdown).toBeEnabled();
   });
 
   test('[AQAPRACT-749] The month is possible to be selected in the drop down', async ({
     page,
   }) => {
     await regPage.openDOBCalendar();
-    await regPage.selectDOBMonth('May');
-    const month = await regPage.getDisplayedDOBMonth();
-    expect(month).toBe('May');
+    await regPage.calendar.selectMonth('May');
+    await expect(regPage.calendar.monthDropdown).toHaveValue('May');
   });
 
-  test.only('[AQAPRACT-750]The date is possible to be selected', async ({
+  test('[AQAPRACT-750]The date is possible to be selected', async ({
     page,
   }) => {
     await regPage.openDOBCalendar();
-    await regPage.selectDateOfBirth({
+    await regPage.calendar.selectDate({
       year: '1995',
       month: 'May',
       day: 15,
     });
 
-    const dobValue = await regPage.getDOBValue();
-    expect(dobValue).toBe('05/15/1995');
+    await expect(regPage.dateOfBirth).toHaveValue('05/15/1995');
   });
 });
