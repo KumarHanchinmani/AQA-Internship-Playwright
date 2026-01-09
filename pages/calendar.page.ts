@@ -6,7 +6,7 @@ export class Calendar {
   public readonly nextMonth: Locator;
   public readonly yearDropdown: Locator;
   public readonly monthDropdown: Locator;
-  private readonly page : Page ;
+  private readonly page: Page;
 
   constructor(page: Page) {
     this.page = page;
@@ -45,14 +45,6 @@ export class Calendar {
 
   async getCurrentYear(): Promise<string> {
     return await this.yearDropdown.inputValue();
-  }
-
-  async isYearDropdownEnabled(): Promise<boolean> {
-    return await this.yearDropdown.isEnabled();
-  }
-
-  async isMonthDropdownEnabled(): Promise<boolean> {
-    return await this.monthDropdown.isEnabled();
   }
 
   async selectYear(year: string): Promise<void> {
