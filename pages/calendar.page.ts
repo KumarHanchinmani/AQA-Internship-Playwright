@@ -63,7 +63,7 @@ export class Calendar {
     return await this.monthDropdown.inputValue();
   }
 
-  async close() {
+  async close(): Promise<void> {
     await this.page.keyboard.press('Escape');
   }
 }
