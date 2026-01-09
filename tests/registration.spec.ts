@@ -1,9 +1,10 @@
 import { test, expect } from '@playwright/test';
-import { LoginPage } from '../pages/loginPage.spec';
-import { RegistrationPage } from '../pages/registrationPage.spec';
+import { LoginPage } from '../pages/loginPage.page';
+import { RegistrationPage } from '../pages/registrationPage.page';
 import { createValidRegistrationData } from '../test-data/registrationData';
 import { Links } from '../enums/links.enums';
 import { generateString } from '../utils/stringUtils';
+import { Calendar } from '../pages/calendar.page';
 
 test.describe('Registration page', () => {
   let loginPage: LoginPage;
@@ -205,7 +206,9 @@ test.describe('Password validation', () => {
     await expect(regPage.submitButton).toBeDisabled();
   });
 
-  test('[AQAPRACT-530] Register with empty Password field', async ({ page }) => {
+  test('[AQAPRACT-530] Register with empty Password field', async ({
+    page,
+  }) => {
     const userData = createValidRegistrationData({
       password: '',
       confirmPassword: '',
@@ -259,5 +262,72 @@ test.describe('Confirm password  validation', () => {
     });
     await regPage.fillForm(userData);
     await expect(regPage.submitButton).toBeDisabled();
+  });
+});
+
+test.describe('Calendar  validation', () => {
+  let loginPage: LoginPage;
+  let regPage: RegistrationPage;
+
+  test.beforeEach(async ({ page }) => {
+    loginPage = new LoginPage(page);
+    regPage = new RegistrationPage(page);
+
+    await loginPage.open();
+    await loginPage.clickRegister();
+  });
+  test('[AQAPRACT-745] Month navigators switch months', async ({ page }) => {
+    await regPage.openDOBCalendar();
+    const initialMonth = await regPage.calendar.getCurrentMonth();
+    await regPage.calendar.previousMonthDOB();
+    const previousMonth = await regPage.calendar.getCurrentMonth();
+    expect(previousMonth).not.toBe(initialMonth);
+
+    await regPage.calendar.nextMonthDOB();
+    const finalMonth = await regPage.calendar.getCurrentMonth();
+    expect(finalMonth).toBe(initialMonth);
+  });
+
+  test('[AQAPRACT-746] Year drop down is possible to be opened', async ({
+    page,
+  }) => {
+    await regPage.openDOBCalendar();
+    await expect(regPage.calendar.yearDropdown).toBeEnabled();
+  });
+
+  test('[AQAPRACT-747] The year is possible to be selected in the drop down', async ({
+    page,
+  }) => {
+    await regPage.openDOBCalendar();
+    await regPage.calendar.selectYear('1950');
+    await expect(regPage.calendar.yearDropdown).toHaveValue('1950');
+  });
+
+  test('[AQAPRACT-748] Month drop down is possible to be opened', async ({
+    page,
+  }) => {
+    await regPage.openDOBCalendar();
+    await expect(regPage.calendar.monthDropdown).toBeEnabled();
+  });
+
+  test('[AQAPRACT-749] The month is possible to be selected in the drop down', async ({
+    page,
+  }) => {
+    await regPage.openDOBCalendar();
+    await regPage.calendar.selectMonth('May');
+    await expect(regPage.calendar.monthDropdown).toHaveValue('May');
+  });
+
+  test('[AQAPRACT-750]The date is possible to be selected', async ({
+    page,
+  }) => {
+    await regPage.openDOBCalendar();
+    await regPage.calendar.selectDate({
+      year: '1995',
+      month: 'May',
+      day: 15,
+    });
+
+    await expect(regPage.dateOfBirth).toHaveValue('05/15/1995');
   });
 });
