@@ -12,18 +12,12 @@ export class RegistrationPage extends BasePage {
   private confirmPasswordField: Locator;
   readonly submitButton: Locator;
   readonly signInLink: Locator;
-<<<<<<< HEAD:pages/registrationPage.spec.ts
-  private readonly yearDropdown: Locator;
-  private readonly monthDropdown: Locator;
-  private emailErrorMessage: Locator;
-
-=======
+  readonly emailErrorMessage: Locator;
   readonly minpasswordError: Locator;
   readonly maxpasswordError: Locator;
   readonly confirmpasswordError: Locator;
   readonly confirmPasswordRequired: Locator;
   public calendar: Calendar;
->>>>>>> origin/main:pages/registrationPage.page.ts
 
   constructor(page: Page) {
     super(page);
@@ -36,25 +30,11 @@ export class RegistrationPage extends BasePage {
     this.confirmPasswordField = page.getByPlaceholder('Confirm Password');
     this.submitButton = page.getByRole('button', { name: 'Submit' });
     this.signInLink = page.getByRole('link', { name: 'Sing in' });
-<<<<<<< HEAD:pages/registrationPage.spec.ts
-    this.monthDropdown = page
-      .locator('.react-datepicker__header select')
-      .nth(1);
-    this.yearDropdown = page.locator('.react-datepicker__header select').nth(0);
-    this.emailErrorMessage = page.getByText(/invalid email/i);
-  }
-
-  private dayLocator(day: number): Locator {
-    const d = day.toString().padStart(2, '0');
-    return this.page.locator(
-      `.react-datepicker__day--0${d}:not(.react-datepicker__day--outside-month)`
-    );
-=======
     this.minpasswordError = page.getByText(/minimum\s+8\s+characters/i);
     this.maxpasswordError = page.getByText(/maximum\s+20\s+characters/i);
     this.confirmpasswordError = page.getByText(/passwords\s+must\s+match/i);
     this.confirmPasswordRequired = page.getByText(/Required/i);
->>>>>>> origin/main:pages/registrationPage.page.ts
+    this.emailErrorMessage = page.getByText(/invalid email/i);
   }
 
   async fillForm(data: RegistrationData): Promise<void> {
@@ -85,13 +65,9 @@ export class RegistrationPage extends BasePage {
     await this.fillForm(data);
     await this.submit();
   }
-  
+
   async expectEmailValidationError(message: string | RegExp): Promise<void> {
     await expect(this.emailErrorMessage).toBeVisible();
     await expect(this.emailErrorMessage).toHaveText(message);
   }
-  
-
-
-
 }
