@@ -1,5 +1,5 @@
 import { Locator, Page } from '@playwright/test';
-import { BasePage } from './basePage.spec';
+import { BasePage } from './basePage.page';
 import { Links } from '../enums/links.enums';
 
 export class LoginPage extends BasePage {
