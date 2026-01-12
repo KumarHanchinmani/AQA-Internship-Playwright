@@ -12,6 +12,7 @@ export class RegistrationPage extends BasePage {
   private confirmPasswordField: Locator;
   readonly submitButton: Locator;
   readonly signInLink: Locator;
+  readonly emailErrorMessage: Locator;
   readonly minpasswordError: Locator;
   readonly maxpasswordError: Locator;
   readonly confirmpasswordError: Locator;
@@ -33,6 +34,7 @@ export class RegistrationPage extends BasePage {
     this.maxpasswordError = page.getByText(/maximum\s+20\s+characters/i);
     this.confirmpasswordError = page.getByText(/passwords\s+must\s+match/i);
     this.confirmPasswordRequired = page.getByText(/Required/i);
+    this.emailErrorMessage = page.getByText(/invalid email/i);
   }
 
   async fillForm(data: RegistrationData): Promise<void> {
@@ -62,5 +64,10 @@ export class RegistrationPage extends BasePage {
   async register(data: RegistrationData): Promise<void> {
     await this.fillForm(data);
     await this.submit();
+  }
+
+  async expectEmailValidationError(message: string | RegExp): Promise<void> {
+    await expect(this.emailErrorMessage).toBeVisible();
+    await expect(this.emailErrorMessage).toHaveText(message);
   }
 }

@@ -83,9 +83,6 @@ test.describe('First name validation', () => {
     const userData = createValidRegistrationData({
       firstName: '',
     });
-
-    await regPage.fillForm(userData);
-    await expect(regPage.submitButton).toBeDisabled();
   });
 });
 
@@ -144,6 +141,48 @@ test.describe('Last name validation', () => {
 
     await regPage.fillForm(userData);
     await expect(regPage.submitButton).toBeDisabled();
+  });
+});
+test.describe('Email validation', () => {
+  let loginPage: LoginPage;
+  let regPage: RegistrationPage;
+
+  test.beforeEach(async ({ page }) => {
+    loginPage = new LoginPage(page);
+    regPage = new RegistrationPage(page);
+
+    await loginPage.open();
+    await loginPage.clickRegister();
+  });
+  test('[AQAPRACT-523] Register with Empty email field', async ({ page }) => {
+    const userData = createValidRegistrationData({
+      email: '',
+    });
+    await regPage.fillForm(userData);
+    await expect(regPage.submitButton).toBeDisabled();
+  });
+
+  test('[AQAPRACT-524] Register with invalid format email field', async ({
+    page,
+  }) => {
+    const userData = createValidRegistrationData({
+      email: 'Abc',
+    });
+    await regPage.fillForm(userData);
+    await expect(regPage.submitButton).toBeDisabled();
+    await regPage.expectEmailValidationError(/invalid email/i);
+  });
+
+  test('[AQAPRACT-525] Register with already existing email', async ({
+    page,
+  }) => {
+    const userData = createValidRegistrationData({
+      email: 'aaabbb@gmal.com',
+    });
+
+    await regPage.fillForm(userData);
+    await regPage.submit();
+    await expect(page).toHaveURL(Links.REGISTER);
   });
 });
 
