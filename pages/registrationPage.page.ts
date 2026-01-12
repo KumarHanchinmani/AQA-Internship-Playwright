@@ -41,13 +41,13 @@ export class RegistrationPage extends BasePage {
   async fillForm(data: RegistrationData): Promise<void> {
     await this.firstNameInput.fill(data.firstName);
     await this.lastNameInput.fill(data.lastName);
-  
+
     if (data.birthDate) {
       await this.dateOfBirth.click();
       await this.calendar.selectDate(data.birthDate);
       await this.calendar.close();
     }
-  
+
     await this.emailField.fill(data.email);
     await this.passwordField.fill(data.password);
     await this.confirmPasswordField.fill(data.confirmPassword);

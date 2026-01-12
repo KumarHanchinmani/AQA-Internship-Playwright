@@ -187,7 +187,6 @@ test.describe('Date of birth validation', () => {
     });
 
     await regPage.fillForm(userData);
-
     await expect(regPage.submitButton).toBeDisabled();
   });
 });
@@ -257,7 +256,7 @@ test.describe('Password validation', () => {
     await regPage.submit();
     await expect(page).toHaveURL(Links.LOGIN);
   });
-  test.only('[AQAPRACT-527] Register with max "Password" length (20 characters)', async ({
+  test('[AQAPRACT-527] Register with max "Password" length (20 characters)', async ({
     page,
   }) => {
     const userData = createValidRegistrationData({
