@@ -1,8 +1,7 @@
 export interface RegistrationData {
   firstName: string;
   lastName: string;
-  birthDate?: BirthDate;
-  manualDob?: string;
+  birthDate?:BirthDate;
   email: string;
   password: string;
   confirmPassword: string;
