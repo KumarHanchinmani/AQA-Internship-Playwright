@@ -1,7 +1,7 @@
 export interface RegistrationData {
   firstName: string;
   lastName: string;
-  birthDate?: BirthDate;
+  birthDate: BirthDate;
   email: string;
   password: string;
   confirmPassword: string;

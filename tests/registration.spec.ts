@@ -165,14 +165,18 @@ test.describe('Date of birth validation', () => {
     await expect(regPage.submitButton).toBeDisabled();
   });
 
-  test('[AQAPRACT-521]The date is filled in manually in the Date of birth field', async ({
+  test('[AQAPRACT-521] The date is filled in manually in the Date of birth field', async ({
     page,
   }) => {
-    const userData= createValidRegistrationData({
-      birthDate: undefined,
+    await regPage.fillForm({
+      firstName: 'kum',
+      lastName: 'gdfgg',
+      email: `user_${Date.now()}@test.com`,
+      password: '1q2w3e4r5t',
+      confirmPassword: '1q2w3e4r5t',
     });
-    await regPage.fillForm(userData);
-    await regPage.fillDateDirectly('10/10/1995');
+
+    await regPage.fillDoBManually('10/10/1995');
     await regPage.submit();
     await expect(page).toHaveURL(Links.LOGIN);
   });

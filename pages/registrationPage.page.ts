@@ -38,19 +38,32 @@ export class RegistrationPage extends BasePage {
     this.emailErrorMessage = page.getByText(/invalid email/i);
   }
 
-  async fillForm(data: RegistrationData): Promise<void> {
-    await this.firstNameInput.fill(data.firstName);
-    await this.lastNameInput.fill(data.lastName);
+  async fillForm(data: Partial<RegistrationData>): Promise<void> {
+    if (data.firstName !== undefined) {
+      await this.firstNameInput.fill(data.firstName);
+    }
 
-    if (data.birthDate) {
+    if (data.lastName !== undefined) {
+      await this.lastNameInput.fill(data.lastName);
+    }
+
+    if (data.birthDate !== undefined) {
       await this.dateOfBirth.click();
       await this.calendar.selectDate(data.birthDate);
       await this.calendar.close();
     }
 
-    await this.emailField.fill(data.email);
-    await this.passwordField.fill(data.password);
-    await this.confirmPasswordField.fill(data.confirmPassword);
+    if (data.email !== undefined) {
+      await this.emailField.fill(data.email);
+    }
+
+    if (data.password !== undefined) {
+      await this.passwordField.fill(data.password);
+    }
+
+    if (data.confirmPassword !== undefined) {
+      await this.confirmPasswordField.fill(data.confirmPassword);
+    }
   }
 
   async submit(): Promise<void> {
@@ -76,7 +89,7 @@ export class RegistrationPage extends BasePage {
     await expect(this.emailErrorMessage).toHaveText(message);
   }
 
-  async fillDateDirectly(date: string) {
+  async fillDoBManually(date: string) {
     await this.dateOfBirth.fill(date);
     await this.calendar.close();
   }

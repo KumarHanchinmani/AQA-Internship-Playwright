@@ -18,14 +18,17 @@ export class Calendar {
       .nth(1);
   }
 
-  async selectDate(date?: { year: string; month: string; day: number }): Promise<void> {
+  async selectDate(date?: {
+    year: string;
+    month: string;
+    day: number;
+  }): Promise<void> {
     if (!date) return;
-  
+
     await this.yearDropdown.selectOption({ label: date.year });
     await this.monthDropdown.selectOption({ label: date.month });
     await this.dayLocator(date.day).click();
   }
-
 
   dayLocator(day: number): Locator {
     const d = day.toString().padStart(2, '0');
