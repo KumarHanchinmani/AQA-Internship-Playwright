@@ -38,30 +38,30 @@ export class RegistrationPage extends BasePage {
     this.emailErrorMessage = page.getByText(/invalid email/i);
   }
 
-  async fillForm(data: Partial<RegistrationData>): Promise<void> {
-    if (data.firstName !== undefined) {
+  async fillForm(data: RegistrationData): Promise<void> {
+    if (data.firstName) {
       await this.firstNameInput.fill(data.firstName);
     }
 
-    if (data.lastName !== undefined) {
+    if (data.lastName) {
       await this.lastNameInput.fill(data.lastName);
     }
 
-    if (data.birthDate !== undefined) {
+    if (data.birthDate) {
       await this.dateOfBirth.click();
       await this.calendar.selectDate(data.birthDate);
       await this.calendar.close();
     }
 
-    if (data.email !== undefined) {
+    if (data.email) {
       await this.emailField.fill(data.email);
     }
 
-    if (data.password !== undefined) {
+    if (data.password) {
       await this.passwordField.fill(data.password);
     }
 
-    if (data.confirmPassword !== undefined) {
+    if (data.confirmPassword) {
       await this.confirmPasswordField.fill(data.confirmPassword);
     }
   }
@@ -89,7 +89,7 @@ export class RegistrationPage extends BasePage {
     await expect(this.emailErrorMessage).toHaveText(message);
   }
 
-  async fillDoBManually(date: string) {
+  async fillDateDirectly(date: string) {
     await this.dateOfBirth.fill(date);
     await this.calendar.close();
   }

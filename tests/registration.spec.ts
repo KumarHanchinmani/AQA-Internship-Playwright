@@ -176,7 +176,7 @@ test.describe('Date of birth validation', () => {
       confirmPassword: '1q2w3e4r5t',
     });
 
-    await regPage.fillDoBManually('10/10/1995');
+    await regPage.fillDateDirectly('11/10/1995');
     await regPage.submit();
     await expect(page).toHaveURL(Links.LOGIN);
   });
