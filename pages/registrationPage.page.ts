@@ -1,4 +1,5 @@
 import { expect, Locator, Page } from '@playwright/test';
+
 import { BasePage } from './basePage.page';
 import { RegistrationData } from '../data-types/registration.interface';
 import { Calendar } from './calendar.page';
@@ -38,14 +39,31 @@ export class RegistrationPage extends BasePage {
   }
 
   async fillForm(data: RegistrationData): Promise<void> {
-    await this.firstNameInput.fill(data.firstName);
-    await this.lastNameInput.fill(data.lastName);
-    await this.dateOfBirth.click();
-    await this.calendar.selectDate(data.birthDate);
-    await this.calendar.close();
-    await this.emailField.fill(data.email);
-    await this.passwordField.fill(data.password);
-    await this.confirmPasswordField.fill(data.confirmPassword);
+    if (data.firstName) {
+      await this.firstNameInput.fill(data.firstName);
+    }
+
+    if (data.lastName) {
+      await this.lastNameInput.fill(data.lastName);
+    }
+
+    if (data.birthDate) {
+      await this.dateOfBirth.click();
+      await this.calendar.selectDate(data.birthDate);
+      await this.calendar.close();
+    }
+
+    if (data.email) {
+      await this.emailField.fill(data.email);
+    }
+
+    if (data.password) {
+      await this.passwordField.fill(data.password);
+    }
+
+    if (data.confirmPassword) {
+      await this.confirmPasswordField.fill(data.confirmPassword);
+    }
   }
 
   async submit(): Promise<void> {
@@ -69,5 +87,10 @@ export class RegistrationPage extends BasePage {
   async expectEmailValidationError(message: string | RegExp): Promise<void> {
     await expect(this.emailErrorMessage).toBeVisible();
     await expect(this.emailErrorMessage).toHaveText(message);
+  }
+
+  async fillDateDirectly(date: string) {
+    await this.dateOfBirth.fill(date);
+    await this.calendar.close();
   }
 }

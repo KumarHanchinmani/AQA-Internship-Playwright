@@ -143,6 +143,57 @@ test.describe('Last name validation', () => {
     await expect(regPage.submitButton).toBeDisabled();
   });
 });
+test.describe('Date of birth validation', () => {
+  let loginPage: LoginPage;
+  let regPage: RegistrationPage;
+
+  test.beforeEach(async ({ page }) => {
+    loginPage = new LoginPage(page);
+    regPage = new RegistrationPage(page);
+
+    await loginPage.open();
+    await loginPage.clickRegister();
+  });
+
+  test('[AQAPRACT-519] Register with empty "Date of birth" field', async ({
+    page,
+  }) => {
+    const userData = createValidRegistrationData({
+      birthDate: undefined,
+    });
+    await regPage.fillForm(userData);
+    await expect(regPage.submitButton).toBeDisabled();
+  });
+
+  test('[AQAPRACT-521] The date is filled in manually in the Date of birth field', async ({
+    page,
+  }) => {
+    await regPage.fillForm({
+      firstName: 'kum',
+      lastName: 'gdfgg',
+      email: `user_${Date.now()}@test.com`,
+      password: '1q2w3e4r5t',
+      confirmPassword: '1q2w3e4r5t',
+    });
+
+    await regPage.fillDateDirectly('11/10/1995');
+    await regPage.submit();
+    await expect(page).toHaveURL(Links.LOGIN);
+  });
+
+  test('[AQAPRACT-522] It is impossible to register with a future Date of Birth', async () => {
+    const userData = createValidRegistrationData({
+      birthDate: {
+        day: 5,
+        month: 'April',
+        year: '2045',
+      },
+    });
+
+    await regPage.fillForm(userData);
+    await expect(regPage.submitButton).toBeDisabled();
+  });
+});
 test.describe('Email validation', () => {
   let loginPage: LoginPage;
   let regPage: RegistrationPage;
