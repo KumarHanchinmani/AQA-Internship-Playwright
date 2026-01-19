@@ -13,9 +13,8 @@ export const test = base.extend<PagesFixtures>({
     await loginPage.open();
     await use(loginPage);
   },
-
-  regPage: async ({ loginPage }, use) => {
-    const regPage = new RegistrationPage(loginPage.getPage());
+  regPage: async ({ page, loginPage }, use) => {
+    const regPage = new RegistrationPage(page);
     await loginPage.clickRegister();
     await use(regPage);
   },
