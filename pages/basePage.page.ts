@@ -7,6 +7,10 @@ export class BasePage {
     this.page = page;
   }
 
+  getPage(): Page {
+    return this.page;
+  }
+
   async navigate(url: string): Promise<void> {
     await this.page.goto(url);
   }
