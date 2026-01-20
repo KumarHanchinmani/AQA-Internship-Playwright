@@ -8,6 +8,9 @@ export class LoginPage extends BasePage {
   readonly signInButton: Locator;
   readonly registrationButton: Locator;
   readonly emailRequiredErrorMessage: Locator;
+  readonly passwordRequiredErrorMessage: Locator;
+  readonly minpasswordError: Locator;
+  readonly maxpasswordError: Locator;
 
   constructor(page: Page) {
     super(page);
@@ -16,10 +19,14 @@ export class LoginPage extends BasePage {
     this.signInButton = page.getByRole('button', { name: 'Sign in' });
     this.registrationButton = page.getByRole('link', { name: 'Registration' });
     this.emailRequiredErrorMessage = page.getByText(/Required/i);
+    this.passwordRequiredErrorMessage = page.getByText(/Required/i);
+    this.minpasswordError = page.getByText(/minimum\s+8\s+characters/i);
+    this.maxpasswordError = page.getByText(/maximum\s+20\s+characters/i);
   }
   async open(): Promise<void> {
     await this.navigate(Links.LOGIN);
   }
+
   async login(username: string, password: string) {
     await this.userNameInput.fill(username);
     await this.passwordInput.fill(password);
@@ -28,10 +35,12 @@ export class LoginPage extends BasePage {
 
   async enterEmail(email: string): Promise<void> {
     await this.userNameInput.fill(email);
+    await this.userNameInput.blur();
   }
 
   async enterPassword(password: string): Promise<void> {
     await this.passwordInput.fill(password);
+    await this.passwordInput.blur();
   }
 
   async clickSignIn(): Promise<void> {
