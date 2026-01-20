@@ -1,5 +1,4 @@
 export const validUser = {
-    email: 'general.account@andersenlab.com',
-    password: 'kT=g$xE9!238'
-  };
-  
+  email: 'general.account@andersenlab.com',
+  password: 'kT=g$xE9!238',
+};
