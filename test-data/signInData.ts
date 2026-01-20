@@ -1,4 +1,4 @@
 export const validUser = {
-  email: 'general.account@andersenlab.com',
-  password: 'kT=g$xE9!238',
+  email: 'cmaaa@gmal.com',
+  password: '1q2w3e4r5t',
 };
