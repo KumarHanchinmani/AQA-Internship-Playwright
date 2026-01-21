@@ -3,6 +3,7 @@ import { BasePage } from './basePage.page';
 import { Links } from '../enums/links.enums';
 
 export class LoginPage extends BasePage {
+  readonly signInHeading: Locator;
   private userNameInput: Locator;
   private passwordInput: Locator;
   readonly signInButton: Locator;
@@ -17,6 +18,7 @@ export class LoginPage extends BasePage {
 
   constructor(page: Page) {
     super(page);
+    this.signInHeading = page.getByRole('heading', { level: 1 });
     this.userNameInput = page.getByPlaceholder('Enter email');
     this.passwordInput = page.getByPlaceholder('Enter password');
     this.signInButton = page.getByRole('button', { name: 'Sign in' });
