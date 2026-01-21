@@ -64,10 +64,10 @@ test.describe('SignIn Password Validation', () => {
 test.describe('SignIn Test Cases', () => {
   test('[AQAPRACT-534] Sign in with valid email and password', async ({
     loginPage,
-    page,
+    profilePage,
   }) => {
     await loginPage.login(validUser.email, validUser.password);
-    const profilePage = new ProfilePage(page);
+
     await expect(profilePage.signOutButton).toBeVisible();
   });
 
@@ -101,11 +101,12 @@ test.describe('SignIn Test Cases', () => {
     await expect(loginPage.passwordInvalidError).toBeVisible();
   });
 
-  test('[AQAPRACT-538] Sign in with email address with invalid format', async ({
+  test.only('[AQAPRACT-538] Sign in with email address with invalid format', async ({
     loginPage,
   }) => {
     await loginPage.enterEmail('qawsedgmal.co');
     await loginPage.enterPassword(validUser.password);
     await expect(loginPage.signInButton).toBeDisabled();
+    await expect(loginPage.emailFormatError).toBeVisible();
   });
 });
