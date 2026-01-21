@@ -33,7 +33,7 @@ export class LoginPage extends BasePage {
       .nth(1);
     this.emailFormatError = page.getByText('Invalid email address');
   }
-  
+
   async open(): Promise<void> {
     await this.navigate(Links.LOGIN);
   }

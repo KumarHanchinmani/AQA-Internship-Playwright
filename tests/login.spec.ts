@@ -1,7 +1,4 @@
 import { test, expect } from '../fixtures/pages.fixture';
-import { LoginPage } from '../pages/loginPage.page';
-import { ProfilePage } from '../pages/profile.page';
-import { RegistrationPage } from '../pages/registrationPage.page';
 import { validUser } from '../test-data/signInData';
 
 test.describe('SignIn Email Validation', () => {
@@ -101,7 +98,7 @@ test.describe('SignIn Test Cases', () => {
     await expect(loginPage.passwordInvalidError).toBeVisible();
   });
 
-  test.only('[AQAPRACT-538] Sign in with email address with invalid format', async ({
+  test('[AQAPRACT-538] Sign in with email address with invalid format', async ({
     loginPage,
   }) => {
     await loginPage.enterEmail('qawsedgmal.co');
