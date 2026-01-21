@@ -11,6 +11,9 @@ export class LoginPage extends BasePage {
   readonly passwordRequiredErrorMessage: Locator;
   readonly minpasswordError: Locator;
   readonly maxpasswordError: Locator;
+  readonly emailInvalidError: Locator;
+  readonly passwordInvalidError: Locator;
+  readonly emailFormatError: Locator;
 
   constructor(page: Page) {
     super(page);
@@ -22,7 +25,15 @@ export class LoginPage extends BasePage {
     this.passwordRequiredErrorMessage = page.getByText(/Required/i);
     this.minpasswordError = page.getByText(/minimum\s+8\s+characters/i);
     this.maxpasswordError = page.getByText(/maximum\s+20\s+characters/i);
+    this.emailInvalidError = page
+      .getByText('Email or password is not valid')
+      .first();
+    this.passwordInvalidError = page
+      .getByText('Email or password is not valid')
+      .nth(1);
+    this.emailFormatError = page.getByText('Invalid email address');
   }
+
   async open(): Promise<void> {
     await this.navigate(Links.LOGIN);
   }

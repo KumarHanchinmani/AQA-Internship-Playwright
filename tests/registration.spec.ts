@@ -1,10 +1,7 @@
 import { test, expect } from '../fixtures/pages.fixture';
-import { LoginPage } from '../pages/loginPage.page';
-import { RegistrationPage } from '../pages/registrationPage.page';
 import { createValidRegistrationData } from '../test-data/registrationData';
 import { Links } from '../enums/links.enums';
 import { generateString } from '../utils/stringUtils';
-import { Calendar } from '../pages/calendar.page';
 
 test.describe('Registration page', () => {
   test('[AQAPRACT-507] Availability of Sign In link on Registration page', async ({
