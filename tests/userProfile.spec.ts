@@ -2,11 +2,11 @@ import { test, expect } from '../fixtures/pages.fixture';
 import { validUser } from '../test-data/signInData';
 
 test.describe('User profile Validation', () => {
-  test('[AQAPRACT-545] "User profile" page layout', async ({
-    loginPage,
-    profilePage,
-  }) => {
+  test.beforeEach(async ({ loginPage }) => {
     await loginPage.login(validUser.email, validUser.password);
+  });
+
+  test('[AQAPRACT-545] "User profile" page layout', async ({ profilePage }) => {
     await expect(profilePage.logoText).toBeVisible();
     await expect(profilePage.logoImage).toBeVisible();
     await expect(profilePage.fullName).toBeVisible();
@@ -29,16 +29,13 @@ test.describe('User profile Validation', () => {
     loginPage,
     profilePage,
   }) => {
-    await loginPage.login(validUser.email, validUser.password);
     await profilePage.clickSignOut();
     await expect(loginPage.signInHeading).toBeVisible();
   });
 
-  test.only('[AQAPRACT-547] "AQA Practice" dropdown options validation', async ({
-    loginPage,
+  test('[AQAPRACT-547] "AQA Practice" dropdown options validation', async ({
     profilePage,
   }) => {
-    await loginPage.login(validUser.email, validUser.password);
     await profilePage.hoverAqaDropdown();
     await expect(profilePage.dropdownSelect).toBeVisible();
     await expect(profilePage.dropdownDragDrop).toBeVisible();

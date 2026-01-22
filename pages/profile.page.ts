@@ -56,7 +56,7 @@ export class ProfilePage extends BasePage {
     await this.signOutButton.click();
   }
 
-  async hoverAqaDropdown() {
+  async hoverAqaDropdown(): Promise<void> {
     await this.aqaDropdown.hover();
   }
 }
