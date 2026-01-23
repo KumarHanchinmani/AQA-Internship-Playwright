@@ -2,11 +2,13 @@ import { test as base } from '@playwright/test';
 import { LoginPage } from '../pages/loginPage.page';
 import { RegistrationPage } from '../pages/registrationPage.page';
 import { ProfilePage } from '../pages/profile.page';
+import { EditProfilePage } from '../pages/editProfile.page';
 
 type PagesFixtures = {
   loginPage: LoginPage;
   regPage: RegistrationPage;
   profilePage: ProfilePage;
+  editProfilePage: EditProfilePage;
 };
 
 export const test = base.extend<PagesFixtures>({
@@ -23,6 +25,10 @@ export const test = base.extend<PagesFixtures>({
   profilePage: async ({ page }, use) => {
     const profilePage = new ProfilePage(page);
     await use(profilePage);
+  },
+  editProfilePage: async ({ page }, use) => {
+    const editProfilePage = new EditProfilePage(page);
+    await use(editProfilePage);
   },
 });
 
