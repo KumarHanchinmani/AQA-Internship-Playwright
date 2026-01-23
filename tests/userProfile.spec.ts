@@ -1,5 +1,7 @@
 import { test, expect } from '../fixtures/pages.fixture';
-import { validUser } from '../test-data/signInData';
+import { ProfilePage } from '../pages/profile.page';
+import { validUser, validUser2 } from '../test-data/signInData';
+import { profileUser } from '../test-data/userData';
 
 test.describe('User profile Validation', () => {
   test.beforeEach(async ({ loginPage }) => {
@@ -12,7 +14,7 @@ test.describe('User profile Validation', () => {
     await expect(profilePage.fullName).toBeVisible();
     await expect(profilePage.dateOfBirth).toBeVisible();
     await expect(profilePage.editButton).toBeVisible();
-    await expect(profilePage.email).toBeVisible();
+    await expect(profilePage.emailLabel).toBeVisible();
     await expect(profilePage.position).toBeVisible();
     await expect(profilePage.technologies).toBeVisible();
     await expect(profilePage.userPhotoHeader).toBeVisible();
@@ -40,5 +42,103 @@ test.describe('User profile Validation', () => {
     await expect(profilePage.dropdownSelect).toBeVisible();
     await expect(profilePage.dropdownDragDrop).toBeVisible();
     await expect(profilePage.dropdownActionsAlerts).toBeVisible();
+  });
+});
+
+test.describe('Edit personal information', () => {
+  test.beforeEach(async ({ loginPage, profilePage }) => {
+    await loginPage.login(validUser2.email, validUser2.password);
+    await profilePage.clickEditButton();
+  });
+
+  test('[AQAPRACT-548] "Edit personal information" flyout available', async ({
+    editProfilePage,
+  }) => {
+    await expect(editProfilePage.title).toBeVisible();
+    await expect(editProfilePage.subTitle).toBeVisible();
+    await expect(editProfilePage.closeButton).toBeVisible();
+    await expect(editProfilePage.firstNameInput).toBeVisible();
+    await expect(editProfilePage.lastNameInput).toBeVisible();
+    await expect(editProfilePage.emailInput).toBeVisible();
+    await expect(editProfilePage.dobLabel).toBeVisible();
+    await expect(editProfilePage.cancelButton).toBeVisible();
+    await expect(editProfilePage.saveButton).toBeVisible();
+    await expect(editProfilePage.firstNameInput).toHaveValue(
+      profileUser.firstName
+    );
+    await expect(editProfilePage.lastNameInput).toHaveValue(
+      profileUser.lastName
+    );
+    await expect(editProfilePage.emailInput).toHaveValue(profileUser.email);
+    await expect(editProfilePage.dobInput).toHaveValue(profileUser.dob);
+  });
+
+  test('[AQAPRACT-549] Edit First name on User profile flyout', async ({
+    editProfilePage,
+    profilePage,
+  }) => {
+    await editProfilePage.updateFirstName('Ball');
+    await editProfilePage.submit();
+    await expect(profilePage.fullName).toContainText('Ball');
+  });
+
+  test('[AQAPRACT-550] Edit Last name on User profile flyout', async ({
+    editProfilePage,
+    profilePage,
+  }) => {
+    await editProfilePage.updateLastName('god');
+    await editProfilePage.submit();
+    await expect(profilePage.fullName).toContainText('god');
+  });
+
+  test('[AQAPRACT-551] Edit Email on User profile flyout', async ({
+    editProfilePage,
+    profilePage,
+  }) => {
+    await editProfilePage.updateEmail('aabb@gmal.com');
+    await editProfilePage.submit();
+    await expect(profilePage.emailValue).toHaveText('aabb@gmal.com');
+  });
+
+  test.only('[AQAPRACT-552] Edit Date of Birth on User profile flyout', async ({
+    editProfilePage,
+    profilePage,
+  }) => {
+    await editProfilePage.updateDOB('10/10/1990');
+    await editProfilePage.submit();
+    await expect(profilePage.dateOfBirthValue).toHaveText('10/10/1990');
+  });
+
+  test('[AQAPRACT-553] Cancel editing the data on the flyout (after the data is edited)', async ({
+    editProfilePage,
+    profilePage,
+  }) => {
+    const originalFirstName = await profilePage.fullName.innerText();
+    await editProfilePage.updateFirstName('aabbcc');
+    await editProfilePage.cancel();
+    await expect(profilePage.fullName).toBeVisible();
+    await expect(profilePage.fullName).toHaveText(originalFirstName);
+  });
+
+  test('[AQAPRACT-554] Cancel editing the data on the flyout (without editing)', async ({
+    editProfilePage,
+    profilePage,
+  }) => {
+    await editProfilePage.cancel();
+    await expect(editProfilePage.title).not.toBeVisible();
+    await expect(profilePage.fullName).toBeVisible();
+    await expect(profilePage.emailValue).toBeVisible();
+    await expect(profilePage.dateOfBirthValue).toBeVisible();
+  });
+
+  test('[AQAPRACT-555] Close "Edit personal information" flyout by "X" button', async ({
+    editProfilePage,
+    profilePage,
+  }) => {
+    const originalFirstName = await profilePage.fullName.innerText();
+    await editProfilePage.updateFirstName('aabbcc');
+    await editProfilePage.close();
+    await expect(profilePage.fullName).toBeVisible();
+    await expect(profilePage.fullName).toHaveText(originalFirstName);
   });
 });

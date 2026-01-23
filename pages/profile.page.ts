@@ -10,9 +10,11 @@ export class ProfilePage extends BasePage {
   readonly userPhoto: Locator;
   readonly fullName: Locator;
   readonly position: Locator;
-  readonly email: Locator;
+  readonly emailLabel: Locator;
+  readonly emailValue: Locator;
   readonly technologies: Locator;
   readonly dateOfBirth: Locator;
+  readonly dateOfBirthValue: Locator;
   readonly editButton: Locator;
   readonly aqaDropdown: Locator;
   readonly footerLogo: Locator;
@@ -36,11 +38,29 @@ export class ProfilePage extends BasePage {
     this.userPhoto = this.userPhoto = page
       .locator('[class*="rounded-full"]')
       .first();
-    this.fullName = page.getByRole('heading', { level: 1 });
+    this.fullName = page
+      .locator('main')
+      .locator('img[alt="Edit"]')
+      .locator('..')
+      .getByRole('heading', { level: 1 });
+
     this.position = page.getByText('Position');
-    this.email = page.getByText('E-mail');
+    this.emailLabel = page.getByText('E-mail');
+    this.emailValue = page
+      .locator('main')
+      .locator('text=E-mail')
+      .locator('..')
+      .locator('div')
+      .filter({ hasText: '@' });
+
     this.technologies = page.getByText('Technologies');
     this.dateOfBirth = page.getByText('Date of birth');
+    this.dateOfBirthValue = page
+      .getByText('Date of birth', { exact: true })
+      .locator('..')
+      .locator('div')
+      .nth(3);
+
     this.editButton = page.getByAltText('Edit');
     this.aqaDropdown = page.getByText('AQA Practice');
     this.footerLogo = page.getByAltText('Company Logo');
@@ -58,5 +78,9 @@ export class ProfilePage extends BasePage {
 
   async hoverAqaDropdown(): Promise<void> {
     await this.aqaDropdown.hover();
+  }
+
+  async clickEditButton(): Promise<void> {
+    await this.editButton.click();
   }
 }
