@@ -100,7 +100,7 @@ test.describe('Edit personal information', () => {
     await expect(profilePage.emailValue).toHaveText('aabb@gmal.com');
   });
 
-  test.only('[AQAPRACT-552] Edit Date of Birth on User profile flyout', async ({
+  test('[AQAPRACT-552] Edit Date of Birth on User profile flyout', async ({
     editProfilePage,
     profilePage,
   }) => {
@@ -142,3 +142,62 @@ test.describe('Edit personal information', () => {
     await expect(profilePage.fullName).toHaveText(originalFirstName);
   });
 });
+
+test.describe('Edit profile Last Name validation', () => {
+  test.beforeEach(async ({ loginPage, profilePage }) => {
+    await loginPage.login(validUser2.email, validUser2.password);
+    await profilePage.clickEditButton();
+  });
+  test('[AQAPRACT-561] Leave "Last Name" field empty on "Edit personal information" flyout', async ({
+    editProfilePage,
+  }) => {
+    await editProfilePage.clearLastName();
+    await expect(editProfilePage.lastNameRequiredError).toBeVisible();
+    await expect(editProfilePage.saveButton).toBeDisabled();
+  });
+
+  test('[AQAPRACT-562] Edit the "Last name" with 1 character length', async ({
+    editProfilePage,
+    profilePage,
+  }) => {
+    await editProfilePage.updateLastName('a'.repeat(1));
+    await editProfilePage.submit();
+    await expect(profilePage.logoText).toBeVisible();
+    await expect(profilePage.fullName).toContainText('a');
+  });
+
+  test('[AQAPRACT-563] Edit the "Last name" with 255 character length', async ({
+    editProfilePage,
+    profilePage,
+  }) => {
+    await editProfilePage.clearLastName();
+    await editProfilePage.updateLastName('a'.repeat(255));
+    await editProfilePage.submit();
+    await expect(profilePage.logoText).toBeVisible();
+    await expect(profilePage.fullName).toContainText('a'.repeat(255));
+  });
+
+  test('[AQAPRACT-564] Edit the "Last name" with 256 character length', async ({
+    editProfilePage,
+  }) => {
+    await editProfilePage.clearLastName();
+    await editProfilePage.updateLastName('a'.repeat(256));
+    await expect(editProfilePage.saveButton).toBeVisible();
+    await editProfilePage.submit();
+    await expect(editProfilePage.lastNameRequiredError).toBeVisible();
+  });
+
+  test('[AQAPRACT-565] Edit the "Last name" field with spaces', async ({
+    editProfilePage,
+  }) => {
+    const lastNameWithSpaces = '     ';
+    await editProfilePage.clearLastName();
+    await editProfilePage.updateFirstName(lastNameWithSpaces);
+    await expect(editProfilePage.saveButton).toBeVisible();
+    await editProfilePage.submit();
+    await expect(editProfilePage.lastNameRequiredError).toBeVisible();
+  });
+});
+
+  
+

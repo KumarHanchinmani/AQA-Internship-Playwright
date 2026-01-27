@@ -12,6 +12,7 @@ export class EditProfilePage extends BasePage {
   readonly closeButton: Locator;
   readonly cancelButton: Locator;
   readonly saveButton: Locator;
+  readonly lastNameRequiredError: Locator;
 
   constructor(page: Page) {
     super(page);
@@ -29,6 +30,9 @@ export class EditProfilePage extends BasePage {
     this.closeButton = page.getByAltText('Close');
     this.cancelButton = page.getByRole('button', { name: 'Cancel' });
     this.saveButton = page.getByRole('button', { name: 'Save' });
+    this.lastNameRequiredError = page.locator(
+      'div:has(input[name="lastName"]) >> text=Required'
+    );
   }
 
   async updateFirstName(firstName: string) {
@@ -57,5 +61,10 @@ export class EditProfilePage extends BasePage {
 
   async close() {
     await this.closeButton.click();
+  }
+
+  async clearLastName(): Promise<void> {
+    await this.lastNameInput.fill('');
+    await this.lastNameInput.blur();
   }
 }
