@@ -100,7 +100,7 @@ test.describe('Edit personal information', () => {
     await expect(profilePage.emailValue).toHaveText('aabb@gmal.com');
   });
 
-  test.only('[AQAPRACT-552] Edit Date of Birth on User profile flyout', async ({
+  test('[AQAPRACT-552] Edit Date of Birth on User profile flyout', async ({
     editProfilePage,
     profilePage,
   }) => {
@@ -140,5 +140,64 @@ test.describe('Edit personal information', () => {
     await editProfilePage.close();
     await expect(profilePage.fullName).toBeVisible();
     await expect(profilePage.fullName).toHaveText(originalFirstName);
+  });
+});
+
+test.describe('Edit profile first Name validation', () => {
+  test.beforeEach(async ({ loginPage, profilePage }) => {
+    await loginPage.login(validUser2.email, validUser2.password);
+    await profilePage.clickEditButton();
+  });
+  test('[AQAPRACT-556] Leave "First name" field empty on "Edit personal information" flyout', async ({
+    editProfilePage,
+    profilePage,
+  }) => {
+    await editProfilePage.clearFirstName();
+    await expect(editProfilePage.firstNameRequiredError).toBeVisible();
+    await expect(editProfilePage.saveButton).toBeDisabled();
+  });
+
+  test('[AQAPRACT-557] Edit the "First name" with 1 character length', async ({
+    editProfilePage,
+    profilePage,
+  }) => {
+    await editProfilePage.updateFirstName('a'.repeat(1));
+    await editProfilePage.submit();
+    await expect(profilePage.logoText).toBeVisible();
+    await expect(profilePage.fullName).toContainText('a');
+  });
+
+  test('[AQAPRACT-558] Edit the "First name" with 255 character length', async ({
+    editProfilePage,
+    profilePage,
+  }) => {
+    await editProfilePage.clearFirstName();
+    await editProfilePage.updateFirstName('a'.repeat(255));
+    await editProfilePage.submit();
+    await expect(profilePage.logoText).toBeVisible();
+    await expect(profilePage.fullName).toContainText('a'.repeat(255));
+  });
+
+  test('[AQAPRACT-559] Edit the "First name" with 256 character length', async ({
+    editProfilePage,
+    profilePage,
+  }) => {
+    await editProfilePage.clearFirstName();
+    await editProfilePage.updateFirstName('a'.repeat(256));
+    await expect(editProfilePage.saveButton).toBeVisible();
+    await editProfilePage.submit();
+    await expect(editProfilePage.firstNameRequiredError).toBeVisible();
+  });
+
+  test('[AQAPRACT-560] Edit the "First name" field with spaces', async ({
+    editProfilePage,
+    profilePage,
+  }) => {
+    const firstNameWithSpaces = '     ';
+    await editProfilePage.clearFirstName();
+    await editProfilePage.updateFirstName(firstNameWithSpaces);
+    await expect(editProfilePage.saveButton).toBeVisible();
+    await editProfilePage.submit();
+    await expect(editProfilePage.firstNameRequiredError).toBeVisible();
   });
 });
