@@ -78,4 +78,9 @@ export class EditProfilePage extends BasePage {
   async close(): Promise<void> {
     await this.closeButton.click();
   }
+
+  async clearLastName(): Promise<void> {
+    await this.lastNameInput.fill('');
+    await this.lastNameInput.blur();
+  }
 }
