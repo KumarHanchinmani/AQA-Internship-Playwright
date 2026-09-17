@@ -51,7 +51,7 @@ test.describe('Edit personal information', () => {
     await profilePage.clickEditButton();
   });
 
-  test.only('[AQAPRACT-548] "Edit personal information" flyout available', async ({
+  test('[AQAPRACT-548] "Edit personal information" flyout available', async ({
     editProfilePage,
   }) => {
     await expect(editProfilePage.title).toBeVisible();
